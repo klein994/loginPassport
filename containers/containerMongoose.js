@@ -1,15 +1,6 @@
-import mongoose from "mongoose";
-
 class containerMongoose {
-    constructor(collection, url, options) {
-        mongoose.connect(url, options)
-        .then(() => {
-            this.collection = mongoose.model(collection.name, collection.schema);
-        })
-        .catch(err => {
-            console.log(err);
-        });
-        
+    constructor(collection) {
+        this.collection = collection;
     }
     async save(elem){
         try{
@@ -64,7 +55,7 @@ class containerMongoose {
             throw new Error('Error al Borrar');
         }
     }
-    populate(generateObject, cant = 5){
+    populate(generateObject, cant = 100){
         const array = [];
         for (let i = 0; i < cant; i++) {
             array.push(generateObject());

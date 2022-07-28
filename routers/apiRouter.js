@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import apiControllers from '../controllers/apiControllers.js';
 import authenticationController from '../controllers/authenticationController.js';
+import { auth } from '../middlewares/middlewares.js';
 
 const router = new Router()
 const { 
@@ -8,6 +9,7 @@ const {
     registerController, failureSignup, successSignup, 
     logout } = authenticationController;
 
+const { getName, productosTest, getInfo, getNumbers } = apiControllers;
 // Login
 router.post('/login', loginController)
 router.get('/successLogin', succesLogin)
@@ -21,7 +23,9 @@ router.get('/successSignup', successSignup)
 //Logout
 router.post('/logout', logout)
 
-router.get('/productos-test', apiControllers.productosTest)
-router.get('/login', apiControllers.getName);
+router.get('/login', getName);
+router.get('/productos-test', auth, productosTest)
+router.get('/getInfo', getInfo);
+router.get('/randoms/:cant?', getNumbers);
 
 export default router

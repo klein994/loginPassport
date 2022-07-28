@@ -1,19 +1,6 @@
 import MongoStore from 'connect-mongo';
-import path from 'path'
-import dotenv from 'dotenv'
 
-const __dirname = process.cwd()
-dotenv.config({
-    path: path.resolve(__dirname, 'byn.env')
-})
-
-
-const mongoose = {
-    url: process.env.MONGOATLAS,
-    options: {
-        useNewUrlParser: true,
-        useUnifiedTopology: true
-    },
+const mongooseConfig = {
     collections: {
         products: {
             name: "products",
@@ -49,7 +36,7 @@ const mongoose = {
 }
 const mongoStore = {
     store: MongoStore.create({
-        mongoUrl: process.env.MONGOATLAS,
+        mongoUrl: 'mongodb+srv://klein994:Kl3in171@cluster0.pg7zl.mongodb.net/?retryWrites=true&w=majority',
         mongoOptions: { useNewUrlParser: true, useUnifiedTopology: true}
     }),
     secret: 'shhhhhhhhhhhhhhhhhhhh',
@@ -59,4 +46,4 @@ const mongoStore = {
         maxAge: 600000
     }
 }
-export { mongoose, mongoStore };
+export { mongooseConfig, mongoStore };

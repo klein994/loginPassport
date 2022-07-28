@@ -1,12 +1,11 @@
 import containerMongoose from '../containers/containerMongoose.js';
-import { mongoose } from '../config.js';
-import { faker } from '@faker-js/faker'
+import { faker } from '@faker-js/faker';
 import { normalize, schema } from 'normalizr';
 import util from 'util';
-import { setTimeout } from 'timers';
+import { productsCollection, messagesCollection } from '../connections/mongoose.js';
 
-const productos = new containerMongoose(mongoose.collections.products, mongoose.url, mongoose.options);
-const mensajes = new containerMongoose(mongoose.collections.messages, mongoose.url, mongoose.options);
+const productos = new containerMongoose(productsCollection);
+const mensajes = new containerMongoose(messagesCollection);
 
 function print(objeto) {
     console.log(util.inspect(objeto, false, 12, true))
@@ -31,20 +30,16 @@ const normalizeMessages = (messages) => {
 }
 
 async function socketController(socket, io) {
-    setTimeout(async () => {
-        socket.emit('connectionToServer', {
-            array_productos: await productos.getAll(), 
-            array_mensajes: normalizeMessages(await mensajes.getAll())
-        });
-    }, 3000);
-    
-    socket.on('connectionToTest', () => {
-        const productsTest = productos.populate(generateObject);
-        socket.emit('sendTest', { productsTest });
+    socket.emit('connectionToServer', {
+        array_productos: await productos.getAll(), 
+        array_mensajes: normalizeMessages(await mensajes.getAll())
+    });
+    socket.emit('connectionToTest', {
+        productsTest: productos.populate(generateObject)
     });
     socket.on('agregarProducto', async (data) => {
         await productos.save(data);
-        io.sockets.emit('actualizarTabla', { array_productos: await productos.getAll() })
+        io.sockets.emit('actualizarTabla', { array_productos: await productos.getAll() });
     })
     socket.on("enviarMensaje", async (data) => {
         await mensajes.save(data);
@@ -52,7 +47,7 @@ async function socketController(socket, io) {
     })
     socket.on("eliminarProductos", async () => {
         await productos.deleteAll();
-        io.sockets.emit('actualizarTabla', { array_productos: await productos.getAll() })
+        io.sockets.emit('actualizarTabla', { array_productos: await productos.getAll() });
     })
     socket.on("eliminarMensajes", async () => {
         await mensajes.deleteAll();
@@ -60,11 +55,11 @@ async function socketController(socket, io) {
     })
     socket.on("eliminarProducto", async (id) => {
         await productos.deleteById(id);
-        io.sockets.emit('actualizarTabla', { array_productos: await productos.getAll() })
+        io.sockets.emit('actualizarTabla', { array_productos: await productos.getAll() });
     })
     socket.on("editarProducto", async (id, producto) => {
         await productos.updateById(id, producto);
-        io.sockets.emit('actualizarTabla', { array_productos: await productos.getAll() })
+        io.sockets.emit('actualizarTabla', { array_productos: await productos.getAll() });
     })
 }
 

@@ -20,6 +20,12 @@
     </div>
 </body>
 
-<script src="../js/indexTest.js"></script>
+<script type="module">
+    import { mostrar } from '../js/functions.js';
+    const socket = io();
+    socket.on('connectionToTest', async ({productsTest}) => {
+        await mostrar('tableProducts', './../templates/tableTest.handlebars', { productsTest });
+    });
+</script>
 
 </html>

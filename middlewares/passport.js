@@ -1,12 +1,10 @@
 import passport from 'passport';
 import { Strategy } from 'passport-local';
-import { mongoose } from '../config.js';
 import daoUsers from '../daos/daoUsers.js';
 import bCrypt from 'bcrypt';
+import { usersCollection } from '../connections/mongoose.js';
 
-const { url, options, collections } = mongoose;
-
-const users = new daoUsers(collections.users, url, options)
+const users = new daoUsers(usersCollection)
 
 passport.use('register', new Strategy({
     passReqToCallback: true

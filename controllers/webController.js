@@ -14,11 +14,14 @@ const webControllers = {
     signup: (req, res) => {
         res.sendFile('signup.html', { root: './public/views' })
     },
+    signupError: (req, res) => {
+        res.sendFile('errorSignup.html', { root: './public/views' })
+    },
     info: (req, res) => {
         res.sendFile('info.html', { root: './public/views' })
     },
-    signupError: (req, res) => {
-        res.sendFile('errorSignup.html', { root: './public/views' })
+    random: (req, res) => {
+        res.sendFile('random.html', { root: './public/views' })
     }
 }
 

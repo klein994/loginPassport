@@ -1,8 +1,8 @@
 import containerMongoose from "../containers/containerMongoose.js";
 
 class daoUsers extends containerMongoose{
-    constructor(collection, url, options) {
-        super(collection, url, options)
+    constructor(collection) {
+        super(collection)
     }
     async findByUsername(username) {
         const userFinded = await this.collection.findOne({ username });
